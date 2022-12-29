@@ -2,7 +2,6 @@
 from flask import render_template
 import sqlite3 as sql
 
-
 # connect to qa_database.sq (database will be created, if not exist)
 def init_database(db_name, db_table):
     con = sql.connect(db_name)
@@ -23,8 +22,7 @@ def send_query_within_response(db_name,query):
         con.commit() # apply changes
     except con.Error as err: # if error
             # then display the error in 'database_error.html' page
-        title = 'Database'
-        return render_template('test_database_error.html', error=err, title=title)
+        return err
     finally:
         con.close() # close the connection
 
@@ -40,7 +38,6 @@ def send_query_with_response(db_name, query, isAll = False):
 
     except con.Error as err: # if error
             # then display the error in 'database_error.html' page
-        title = 'Database'
-        return render_template('test_database_error.html', error=err, title=title)
+        return err
     finally:
         con.close() # close the connection

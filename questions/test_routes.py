@@ -2,7 +2,6 @@
 
 from test import app
 from flask import render_template, request
-import sqlite3 as sql
 
 from utils import *
 
@@ -10,6 +9,11 @@ db_name = 'test.db'
 db_table = 'test_QA'
 
 init_database(db_name, db_table)
+
+def view_error(err):
+    title = 'Database'
+    return render_template('test_database_error.html', error=err, title=title)
+
 
 # home page
 @app.route('/')  # root : main page
