@@ -33,7 +33,7 @@ def send_query_with_response(db_name, query, isAll = False):
             question = c.fetchall()
         else:
             question = c.fetchone()
-        con.commit() # apply changes
+        # con.commit() # apply changes
         return question
 
     except con.Error as err: # if error
