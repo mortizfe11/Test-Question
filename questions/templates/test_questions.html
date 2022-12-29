@@ -5,6 +5,9 @@
     <h1>Questions</h1>
     <table class="table table-dark">
         <tr><th>Select Your Question:</th><th></th><th></th><th></th></tr>
+        {% if not questions %}
+            <tr><td>No hay preguntas por contestar.</td></tr>
+        {% endif %}
         {% for id, q in questions %}
         <tr><td>{{q}}</td><td><a href="{{url_for('question', id=id)}}">Answer</a></td><td><a href="{{url_for('edit', id=id)}}">Edit</a></td><td><a href="{{url_for('delete', id=id)}}">Delete</a></td></tr>
         {% endfor %}
