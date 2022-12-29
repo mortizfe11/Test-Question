@@ -4,47 +4,12 @@ from test import app
 from flask import render_template, request
 import sqlite3 as sql
 
+from utils import *
+
 db_name = 'test.db'
 db_table = 'test_QA'
-# connect to qa_database.sq (database will be created, if not exist)
-con = sql.connect(db_name)
-con.execute(f'CREATE TABLE IF NOT EXISTS {db_table} (ID INTEGER PRIMARY KEY AUTOINCREMENT,'
-            + 'question TEXT, answer TEXT)')
-con.close()
 
-def send_query_within_response(query):
-    try:
-        con = sql.connect(db_name)    
-        c =  con.cursor() # cursor
-        # insert data
-        c.execute(query)  
-        con.commit() # apply changes
-    except con.Error as err: # if error
-            # then display the error in 'database_error.html' page
-        title = 'Database'
-        return render_template('test_database_error.html', error=err, title=title)
-    finally:
-        con.close() # close the connection
-
-def send_query_with_response(query, isAll = False):
-    try:
-        con = sql.connect(db_name)    
-        c =  con.cursor() # cursor
-        # insert data
-        c.execute(query)  
-        if isAll:
-            question = c.fetchall()
-        else:
-            question = c.fetchone()
-        con.commit() # apply changes
-        return question
-
-    except con.Error as err: # if error
-            # then display the error in 'database_error.html' page
-        title = 'Database'
-        return render_template('test_database_error.html', error=err, title=title)
-    finally:
-        con.close() # close the connection
+init_database(db_name, db_table)
 
 # home page
 @app.route('/')  # root : main page
@@ -69,7 +34,7 @@ def create():
         # store in database
         # add code here
         query = f"INSERT INTO {db_table} (question, answer) VALUES ('{question}','{answer}')"
-        send_query_within_response(query)
+        send_query_within_response(db_name, query)
         title = 'Thanks'
         return render_template('test_createThanks.html', question=question, title=title)
     else:
@@ -78,7 +43,7 @@ def create():
 @app.route('/question/')
 def questions():
     query = f"Select id, question FROM {db_table}"
-    questions = send_query_with_response(query, isAll = True)
+    questions = send_query_with_response(db_name, query, isAll = True)
     title = 'Questions'
     return render_template('test_questions.html', questions=questions, title=title)
 
@@ -89,7 +54,7 @@ def question(id):
         # send the form
         # add code here to read the question from database
         query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(query)
+        question = send_query_with_response(db_name, query)
         title = 'Question'
         return render_template('test_question.html', question=question[0], title=title)
 
@@ -99,7 +64,7 @@ def question(id):
 
         # code to read the answer from database
         query = f"Select answer FROM {db_table} where id = {id}"
-        question = send_query_with_response(query)
+        question = send_query_with_response(db_name, query)
         correct_answer = question[0]
 
         if submitted_answer == correct_answer:
@@ -120,7 +85,7 @@ def question(id):
 def edit(id):
     if request.method == 'GET':
         query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(query)
+        question = send_query_with_response(db_name, query)
         title = 'Edit question'
         return render_template('test_edit.html', id=id, question=question[0], title = title)
 
@@ -128,12 +93,12 @@ def edit(id):
         question = request.form['question']
         answer = request.form['answer']
         query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(query)[0]
+        question = send_query_with_response(db_name, query)[0]
 
         query = f"Select question, answer FROM {db_table} where id = {id}"
-        old_question, old_answer = send_query_with_response(query)
+        old_question, old_answer = send_query_with_response(db_name, query)
         query = f"UPDATE {db_table} SET question='{question}', answer='{answer}' where id = {id}"
-        send_query_within_response(query)    
+        send_query_within_response(db_name, query)    
         title = 'Edit thanks'
         return render_template('test_editThanks.html', 
             id=id, 
@@ -145,9 +110,9 @@ def edit(id):
 @app.route("/delete/<int:id>", methods=['GET'])
 def delete(id):
     query = f"Select question FROM {db_table} where id = {id}"
-    question = send_query_with_response(query)
+    question = send_query_with_response(db_name, query)
     
     query = f"DELETE FROM {db_table} WHERE id = {id}"
-    send_query_within_response(query)
+    send_query_within_response(db_name, query)
     title = 'Delete thanks'
     return render_template('test_deleteThanks.html', question=question[0], title = title)
