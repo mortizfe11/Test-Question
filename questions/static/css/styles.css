@@ -1,0 +1,21 @@
+h1, h2{
+    font-weight: 600;
+    margin-bottom: 3vw;
+}
+
+input{
+    background-color: #212529;
+}
+
+h2, label, p {
+    color: #e9ecef;
+}
+
+a, h1, h2 span{
+    color: coral;
+}
+
+a{
+    text-decoration: none;
+    opacity: 0.9;
+}

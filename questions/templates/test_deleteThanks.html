@@ -1,14 +1,8 @@
-<!-- createThanks.html  -->
+<!-- deleteThanks.html  -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thanks</title>
-</head>
-<body>
+{% block main %}
     <h1> Thank You! Your question is deleted successfully. </h1>
     <p> Your question was : <b> {{ question }} </b> </p>
 
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
-</body>
-</html>
+{% endblock %}

@@ -1,15 +1,8 @@
 <!-- sorry.html  -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sorry</title>
-</head>
-<body>
-    <h2> Sorry! Your answer is incorrect.</h2>
+{% block main %}
+    <h2> Sorry! Your answer is <span>incorrect</span>.</h2>
     <p> The correct answer is : <b> {{ answer }} </b> </p>
     <p> You submitted : <b> {{ yourAnswer }} </b> </p>
-
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
-</body>
-</html>
+{% endblock %}

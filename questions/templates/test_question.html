@@ -1,19 +1,15 @@
 <!-- question.html -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Question</title>
-</head>
-<body>
+{% block main %}
     <h1> {{ question }} </h1>
 
     <form method='post'>
-        <b>Answer</b> <input type="text" name="answer"><br>
-        <input type="submit" name="submit" value="Submit">
-        <input type="reset" name="reset" value="Reset"><br>
+        <label for="answer" class="form-label"><b>Answer</b></label> 
+        <input class="form-control border-dark bg-dark text-white" type="text" name="answer">
+        <div class="d-flex justify-content-start">
+            <input class="btn btn-dark py-3 px-5 mx-2 my-4" type="submit" name="submit" value="Submit">
+            <input class="btn btn-dark py-3 px-5 mx-2 my-4" type="reset" name="reset" value="Reset"><br>
+        </div>
     </form>
-
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
-</body>
-</html>
+{% endblock %}

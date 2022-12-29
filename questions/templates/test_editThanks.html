@@ -1,15 +1,8 @@
-<!-- createThanks.html  -->
+<!-- editThanks.html  -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thanks</title>
-</head>
-<body>
+{% block main %}
     <h1> Thank You! Your question is edit successfully. </h1>
     <p> Your old question was : <b> {{ old_question }} </b> </p>
     <p> Your new question was : <b> {{ question }} </b> </p>
-
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
-</body>
-</html>
+{% endblock %}

@@ -1,13 +1,6 @@
 <!-- correct.html  -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Congratulation</title>
-</head>
-<body>
-    <h2> Congratulation! Your answer is correct. </h2>
-
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
-</body>
-</html>
+{% block main %}
+    <h2> Congratulation! Your answer is <span>correct<span>. </h2>
+{% endblock %}

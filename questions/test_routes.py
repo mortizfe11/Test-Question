@@ -21,7 +21,8 @@ def send_query_within_response(query):
         con.commit() # apply changes
     except con.Error as err: # if error
             # then display the error in 'database_error.html' page
-        return render_template('test_database_error.html', error=err)
+        title = 'Database'
+        return render_template('test_database_error.html', error=err, title=title)
     finally:
         con.close() # close the connection
 
@@ -40,7 +41,8 @@ def send_query_with_response(query, isAll = False):
 
     except con.Error as err: # if error
             # then display the error in 'database_error.html' page
-        return render_template('test_database_error.html', error=err)
+        title = 'Database'
+        return render_template('test_database_error.html', error=err, title=title)
     finally:
         con.close() # close the connection
 
@@ -48,14 +50,16 @@ def send_query_with_response(query, isAll = False):
 @app.route('/')  # root : main page
 def index():
     # by default, 'render_template' looks inside the folder 'template'
-    return render_template('test_index.html')
+    title = "Home"
+    return render_template('test_index.html', title=title)
 
 # Create question
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'GET':
         # send the form
-        return render_template('test_create.html')
+        title = 'Create'
+        return render_template('test_create.html', title=title)
 
     elif request.method == 'POST':
         # read data from the form and save in variable
@@ -66,7 +70,8 @@ def create():
         # add code here
         query = f"INSERT INTO {db_table} (question, answer) VALUES ('{question}','{answer}')"
         send_query_within_response(query)
-        return render_template('test_createThanks.html', question=question)
+        title = 'Thanks'
+        return render_template('test_createThanks.html', question=question, title=title)
     else:
         return "method no allowed", 405        
 
@@ -74,7 +79,8 @@ def create():
 def questions():
     query = f"Select id, question FROM {db_table}"
     questions = send_query_with_response(query, isAll = True)
-    return render_template('test_questions.html', questions=questions)
+    title = 'Questions'
+    return render_template('test_questions.html', questions=questions, title=title)
 
 # Display question
 @app.route('/question/<int:id>', methods=['GET', 'POST'])
@@ -84,7 +90,8 @@ def question(id):
         # add code here to read the question from database
         query = f"Select question FROM {db_table} where id = {id}"
         question = send_query_with_response(query)
-        return render_template('test_question.html', question=question[0])
+        title = 'Question'
+        return render_template('test_question.html', question=question[0], title=title)
 
     elif request.method == 'POST':
         # read and check answers
@@ -96,11 +103,14 @@ def question(id):
         correct_answer = question[0]
 
         if submitted_answer == correct_answer:
-            return render_template('test_correct.html')
+            title = 'Congratulation'
+            return render_template('test_correct.html', title = title)
         else:
+            title = 'Sorry'
             return render_template('test_sorry.html',
                 answer = correct_answer,
-                yourAnswer = submitted_answer
+                yourAnswer = submitted_answer,
+                title = title
             )
 
     else:
@@ -111,7 +121,8 @@ def edit(id):
     if request.method == 'GET':
         query = f"Select question FROM {db_table} where id = {id}"
         question = send_query_with_response(query)
-        return render_template('test_edit.html', id=id, question=question[0])
+        title = 'Edit question'
+        return render_template('test_edit.html', id=id, question=question[0], title = title)
 
     elif request.method == 'POST':
         question = request.form['question']
@@ -123,14 +134,20 @@ def edit(id):
         old_question, old_answer = send_query_with_response(query)
         query = f"UPDATE {db_table} SET question='{question}', answer='{answer}' where id = {id}"
         send_query_within_response(query)    
-        return render_template('test_editThanks.html', id=id, question=question, old_question=old_question)
+        title = 'Edit thanks'
+        return render_template('test_editThanks.html', 
+            id=id, 
+            question=question, 
+            old_question=old_question,
+            title = title
+        )
 
 @app.route("/delete/<int:id>", methods=['GET'])
 def delete(id):
-
     query = f"Select question FROM {db_table} where id = {id}"
     question = send_query_with_response(query)
     
     query = f"DELETE FROM {db_table} WHERE id = {id}"
     send_query_within_response(query)
-    return render_template('test_deleteThanks.html', question=question[0])
+    title = 'Delete thanks'
+    return render_template('test_deleteThanks.html', question=question[0], title = title)
