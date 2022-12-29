@@ -1,5 +1,13 @@
-{% block go %}
-<footer class="container">
-    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
+{% block footer %}
+<footer class="fixed-bottom bg-coral text-black text-center py-3">
+    <p><a class="btn btn-dark" href="{{url_for('index')}}">Go to main page</a></p>
+
+    <h3 class="my-4"><strong>App de Preguntas</strong> - Stack</h3>
+    <ul class="px-0 list-unstyled">
+        <li><strong>Front-end:</strong> HTML, CSS, Bootstrap</li>
+        <li><strong>Back-end:</strong> Flask, Python, SQLite3</li> 
+        <li><strong>Despliegue:</strong> PyhonEverywhere</li>
+    </ul>
+
 </footer>
 {% endblock %}
