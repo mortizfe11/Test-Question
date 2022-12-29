@@ -1,0 +1,20 @@
+<!-- question.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Question</title>
+</head>
+<body>
+    <h1> {{ question }} </h1>
+
+    <form method='post'>
+        <b>Question</b> <input type="text" name="question"><br>
+        <b>Answer</b> <input type="text" name="answer"><br>
+        <input type="submit" name="submit" value="Submit">
+        <input type="reset" name="reset" value="Reset"><br>
+    </form>
+
+    <p>Go to <a href="{{url_for('edit', id=id)}}">main page</a></p>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- questions.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questions</title>
+</head>
+<body>
+    <h1>Questions</h1>
+    <table>
+        <tr><th>Select Your Question:</th></tr>
+        {% for id, q in questions %}
+        <tr><td>{{q}}</td><td><a href="{{url_for('question', id=id)}}">Answer</a></td><td><a href="{{url_for('edit', id=id)}}">Edit</a></td><td><a href="{{url_for('delete', id=id)}}">Delete</a></td></tr>
+        {% endfor %}
+    </table>
+
+    <p>Go to <a href="{{url_for('index')}}">main page</a></p>
+</body>
+</html>
