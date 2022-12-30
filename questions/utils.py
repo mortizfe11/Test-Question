@@ -1,3 +1,4 @@
+#%%
 import sqlite3 as sql
 
 # connect to qa_database.sq (database will be created, if not exist)
@@ -62,7 +63,6 @@ def value_of_columns(db_name : str, db_table : str, name_cols : list[str]):
     finally:
         con.close() # close the connection
 
-#%%
 def select(db_name : str, db_table : str, name_cols : list[str], id = 0):
     val_cols = value_of_columns(db_name, db_table, name_cols)
     if val_cols != sql.Error:
@@ -92,3 +92,4 @@ def insert(db_name : str, db_table : str, values : list[str]):
     query = f"INSERT INTO {db_table} (question, answer) VALUES ('{question}','{answer}')"
     flag = send_query_within_response(db_name, query)
     return flag
+# %%
