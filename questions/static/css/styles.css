@@ -18,11 +18,7 @@ a, h1, h2 span{
 a{
     text-decoration: none;
 }
-/*
-footer a{
-    color: #50d5ff;
-}*/
 
-.bg-coral{
+.bg-gray{
     background: #b5bbc3;
 }
