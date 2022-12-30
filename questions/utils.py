@@ -41,8 +41,9 @@ def send_query_with_response(db_name : str, query : str, isAll : bool = False):
     finally:
         con.close() # close the connection
 
+# Comprobamos que el nombre de las columnas 
 def value_of_columns(db_name : str, db_table : str, name_cols : list[str]):
-    if name_cols == list:
+    if name_cols == []:
         return '*'
     try:
         query = f"SELECT * FROM {db_table}"
@@ -72,10 +73,14 @@ def select(db_name : str, db_table : str, name_cols : list[str], id = 0):
     else: return val_cols
 
 def update(db_name : str, db_table : str, values : list[str], id: int):
-    question, answer = values 
-    query = f"UPDATE {db_table} SET question='{question}', answer='{answer}' where id = {id}"
-    flag = send_query_within_response(db_name, query)
-    return flag
+    question, answer = values
+    response = select(db_name, db_table, [], id)
+    if response:
+        query = f"UPDATE {db_table} SET question='{question}', answer='{answer}' where id = {id}"
+        flag = send_query_within_response(db_name, query)
+        return flag
+    else:
+        return sql.Error(f"Id {id} doesn't exist in the table {db_table}")
 
 def delete(db_name : str, db_table : str, id : int):
     query = f"DELETE FROM {db_table} WHERE id = {id}"    

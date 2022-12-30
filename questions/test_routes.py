@@ -11,24 +11,29 @@ db_table = 'test_QA'
 
 init_database(db_name, db_table)
 
+# Si detectó un error, visualizará la vista del error.
 def is_view_error(err):
     if err == sql.Error: 
         title = 'Database'
         return render_template('test_database_error.html', error=err, title=title)
 
+# Petición al select de la BDD
 def ask_select(db_name, db_table, name_cols, id = 0):
     question = select(db_name, db_table, name_cols, id)
     is_view_error(question) 
     return question
 
+# Petición al delete de la BDD
 def ask_delete(db_name, db_table, id):
     flag = delete(db_name,db_table,id)
     is_view_error(flag)
 
+# Petición al insert de la BDD
 def ask_insert(db_name, db_table, values):
     flag = insert(db_name,db_table, values)
     is_view_error(flag)
 
+# Petición al update de la BDD
 def ask_update(db_name, db_table, values, id):
     flag = update(db_name,db_table, values, id)
     is_view_error(flag)
