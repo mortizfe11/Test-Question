@@ -1,5 +1,6 @@
 # routes.py
 
+from sqlite3 import Error
 from test import app
 from flask import render_template, request
 
@@ -10,10 +11,27 @@ db_table = 'test_QA'
 
 init_database(db_name, db_table)
 
-def view_error(err):
-    title = 'Database'
-    return render_template('test_database_error.html', error=err, title=title)
+def is_view_error(err):
+    if err == sql.Error: 
+        title = 'Database'
+        return render_template('test_database_error.html', error=err, title=title)
 
+def ask_select(db_name, db_table, name_cols, id = 0):
+    question = select(db_name, db_table, name_cols, id)
+    is_view_error(question) 
+    return question
+
+def ask_delete(db_name, db_table, id):
+    flag = delete(db_name,db_table,id)
+    is_view_error(flag)
+
+def ask_insert(db_name, db_table, values):
+    flag = insert(db_name,db_table, values)
+    is_view_error(flag)
+
+def ask_update(db_name, db_table, values, id):
+    flag = update(db_name,db_table, values, id)
+    is_view_error(flag)
 
 # home page
 @app.route('/')  # root : main page
@@ -37,8 +55,7 @@ def create():
 
         # store in database
         # add code here
-        query = f"INSERT INTO {db_table} (question, answer) VALUES ('{question}','{answer}')"
-        send_query_within_response(db_name, query)
+        ask_insert(db_name, db_table, [question, answer])
         title = 'Thanks'
         return render_template('test_createThanks.html', question=question, title=title)
     else:
@@ -46,8 +63,8 @@ def create():
 
 @app.route('/question/')
 def questions():
-    query = f"Select id, question FROM {db_table}"
-    questions = send_query_with_response(db_name, query, isAll = True)
+    name_cols = ['id', 'question']
+    questions = ask_select(db_name, db_table, name_cols)
     title = 'Questions'
     return render_template('test_questions.html', questions=questions, title=title)
 
@@ -57,8 +74,8 @@ def question(id):
     if request.method == 'GET':
         # send the form
         # add code here to read the question from database
-        query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(db_name, query)
+        name_cols = ['question']
+        question = ask_select(db_name, db_table, name_cols, id)
         title = 'Question'
         return render_template('test_question.html', question=question[0], title=title)
 
@@ -67,8 +84,9 @@ def question(id):
         submitted_answer = request.form['answer']
 
         # code to read the answer from database
-        query = f"Select answer FROM {db_table} where id = {id}"
-        question = send_query_with_response(db_name, query)
+
+        name_cols = ['answer']
+        question = ask_select(db_name, db_table, name_cols, id)
         correct_answer = question[0]
 
         if submitted_answer == correct_answer:
@@ -88,21 +106,25 @@ def question(id):
 @app.route("/edit/<int:id>", methods=['GET', 'POST'])
 def edit(id):
     if request.method == 'GET':
-        query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(db_name, query)
+
+        name_cols = ['question']
+        question = ask_select(db_name, db_table, name_cols, id)
         title = 'Edit question'
         return render_template('test_edit.html', id=id, question=question[0], title = title)
 
     elif request.method == 'POST':
         question = request.form['question']
         answer = request.form['answer']
-        query = f"Select question FROM {db_table} where id = {id}"
-        question = send_query_with_response(db_name, query)[0]
 
-        query = f"Select question, answer FROM {db_table} where id = {id}"
-        old_question, old_answer = send_query_with_response(db_name, query)
-        query = f"UPDATE {db_table} SET question='{question}', answer='{answer}' where id = {id}"
-        send_query_within_response(db_name, query)    
+        values = [question, answer]
+        #name_cols = ['question']
+        #question = ask_select(db_name, db_table, name_cols, id)[0]
+
+        name_cols = ['question', 'answer']
+        old_question, old_answer = ask_select(db_name, db_table, name_cols, id)
+
+        ask_update(db_name, db_table, values, id)
+        
         title = 'Edit thanks'
         return render_template('test_editThanks.html', 
             id=id, 
@@ -113,10 +135,8 @@ def edit(id):
 
 @app.route("/delete/<int:id>", methods=['GET'])
 def delete(id):
-    query = f"Select question FROM {db_table} where id = {id}"
-    question = send_query_with_response(db_name, query)
-    
-    query = f"DELETE FROM {db_table} WHERE id = {id}"
-    send_query_within_response(db_name, query)
+    name_cols = ['question']
+    question = ask_select(db_name, db_table, name_cols, id)
+    ask_delete(db_name, db_table, id)
     title = 'Delete thanks'
     return render_template('test_deleteThanks.html', question=question[0], title = title)
