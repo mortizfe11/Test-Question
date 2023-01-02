@@ -9,7 +9,7 @@
             <tr><td>No hay preguntas por contestar.</td></tr>
         {% endif %}
         {% for id, q in questions %}
-        <tr><td>{{q}}</td><td><a href="{{url_for('question', id=id)}}">Answer</a></td><td><a href="{{url_for('edit', id=id)}}">Edit</a></td><td><a href="{{url_for('delete', id=id)}}">Delete</a></td></tr>
+        <tr><td>{{q}}</td><td><a href="{{url_for('question', id=id)}}">Answer</a></td><td><a href="{{url_for('edit', id=id)}}">Edit</a></td><td><a href="{{url_for('deleteQuestion', id=id)}}">Delete</a></td></tr>
         {% endfor %}
     </table>
 {% endblock %}

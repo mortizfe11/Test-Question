@@ -28,7 +28,6 @@ def ask_select(db_name, db_table, name_cols, id = 0):
 # Petición al delete de la BDD
 def ask_delete(db_name, db_table, id):
     flag = delete(db_name,db_table,id)
-    print(flag)
     is_view_error(flag)
 
 # Petición al insert de la BDD
@@ -142,10 +141,9 @@ def edit(id):
         )
 
 @app.route("/delete/<int:id>", methods=['GET'])
-def delete(id):
+def deleteQuestion(id):
     name_cols = ['question']
     question = ask_select(db_name, db_table, name_cols, id)
-    print(id, question)
     ask_delete(db_name, db_table, id)
     title = 'Delete thanks'
     return render_template('test_deleteThanks.html', question=question[0], title = title)

@@ -87,7 +87,7 @@ def update(db_name : str, db_table : str, values : list[str], id: int):
 
 def delete(db_name : str, db_table : str, id : int):
     query = f"DELETE FROM {db_table} WHERE id = {id}"    
-    flag = send_query_within_response(db_name, query, id)
+    flag = send_query_within_response(db_name, query)
     print(flag)
     return flag
 
